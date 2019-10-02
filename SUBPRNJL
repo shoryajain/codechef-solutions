@@ -1,0 +1,190 @@
+#include<bits/stdc++.h>
+#include <list> 
+#include<unordered_map>
+#include <cmath>
+#include<iostream>
+using namespace std;
+#define mid(Le,Ri) ((Le+Ri)/2)
+#define lc(id)  (2*id+1)
+#define rc(id)  (2*id+2)
+
+unordered_map< int, vector<int>> umap;
+
+int occurences(int ele, int a, int b)
+{ 
+    unordered_map< int, vector<int>> :: iterator itr = umap.find(ele);
+    vector<int> :: iterator itr2 = (itr->second).begin();
+    int occ = 0;
+    for(; itr2 != (itr->second).end(); ++itr2) 
+    {
+        if (*itr2 >= a) 
+        {
+            if(*itr2 <=b) 
+                occ++;
+            else 
+                break;
+        }  
+    }
+
+    return occ;
+}
+
+int finder(int occ, int a, int b)
+{ 
+    int flag = 0;
+    unordered_map< int, vector<int>> :: iterator itr = umap.find(occ);
+    if(itr != umap.end()) {
+        vector<int> :: iterator itr2 = (itr->second).begin();
+        for(; itr2 != (itr->second).end(); ++itr2) 
+        {
+            if (*itr2 >= a) 
+            {
+                if(*itr2 <=b) 
+                {
+                    flag = 1;
+                    break;
+                }
+
+                else 
+                    break;
+            }  
+        }
+    }
+
+    return flag;
+}
+
+int MR[100001];
+int id=0;
+
+struct Node{
+        int cont;
+        int le , ri;
+        Node (int a , int b , int c)
+        {
+            cont = a ;
+            le = b ;
+            ri = c;
+        }
+        Node ()
+        {
+            cont=   0 ;
+            le  =  -1 ;
+            ri  =  -1;
+        }
+    }tree[8600001];
+
+int build(int Le , int Ri)
+{
+    ++id;
+    int a = id;
+    if(Le==Ri)
+        return a;
+    tree[a].le = build(Le,mid(Le,Ri));
+    tree[a].ri = build(mid(Le,Ri)+1,Ri);
+    return a;
+}
+
+int update(int Le , int Ri , int root , int qid )
+{
+    if( Ri<qid || Le>qid)
+        return root;
+    ++id;
+    int a = id;
+    if( Ri==qid && Le==qid)
+    {
+        tree[a] = Node(tree[root].cont+1,-1,-1);
+        return a;
+    }
+    tree[a] = Node(tree[root].cont+1,update(Le,mid(Le,Ri),tree[root].le,qid),update(mid(Le,Ri)+1,Ri,tree[root].ri,qid));
+    return a;
+}
+
+int query(int Le , int Ri , int r1 , int r2 , int K  )
+{
+    int a = Le , b = Ri;
+    for(;Le!=Ri;)
+    {
+        if(tree[tree[r2].le].cont-tree[tree[r1].le].cont>=K)
+        {
+            Ri = mid(Le,Ri);
+            r1 = tree[r1].le;
+            r2 = tree[r2].le;
+        }
+        else
+        {
+            Le = mid(Le,Ri)+1;
+            K-=tree[tree[r2].le].cont-tree[tree[r1].le].cont;
+            r1 = tree[r1].ri;
+            r2 = tree[r2].ri;
+        }
+    }
+    assert(a<=Le && Le<=b);
+    return Le;
+}
+
+int main()
+{
+    ios::sync_with_stdio(0);
+    cin.tie(0);
+    int t;
+    cin>>t;
+    int ans[t];
+    for(int m = 0; m<t; ++m) 
+    {
+        id = 0;
+        int N,i,x,num = 0;
+        unsigned long long int K;
+        cin>>N>>K;
+        vector < int > A(N+1),V;
+        vector < int > B(N+1);
+        vector < int > root(N+1);
+        A[0]=0;
+        for(i=1;i<=N;++i){
+            cin>>A[i];
+            V.push_back(A[i]);
+        }
+
+        sort(V.begin(),V.end());
+        for(i=1;i<=N;++i)
+        {
+            B[i] = lower_bound(V.begin(),V.end(),A[i])-V.begin();
+            MR[B[i]] = A[i];
+        }
+        
+        root[0] = build(0,N-1);
+        for(i=1;i<=N;++i)
+            root[i] = update(0,N-1,root[i-1],B[i]);
+
+        unordered_map< int, vector<int>> hasher;
+        int vals[N];
+        for(i=0;i<N;++i) {
+            unsigned long long int m = ceil((double)K/(i+1)); 
+            x = floor((double)(K-1)/m) + 1;
+            vals[i] = x;
+            hasher[A[i+1]].emplace_back(i);
+        }
+        
+        umap = hasher;
+
+        for(i=0;i<N;++i) 
+        {
+            int j = i;
+            for(;j<N;++j) 
+            {
+                int element = MR[query(0,N-1,root[i],root[j+1],vals[j-i])];
+                int occ = occurences(element,i,j);
+                int found = finder(occ,i,j);
+                if(found == 1) {
+                    num++;
+                }
+            }
+        } 
+        ans[m] = num;
+    }
+    for(int i=0; i<t; ++i) 
+    {
+        cout<<ans[i]<<"\n";
+    }
+    return 0;
+}
