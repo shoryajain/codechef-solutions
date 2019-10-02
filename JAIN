@@ -1,0 +1,83 @@
+from collections import defaultdict
+
+aeiou = frozenset({'a','e','i','o','u'})
+aeio = frozenset({'a','e','i','o'})
+aeiu = frozenset({'a','e','i','u'})
+aeou = frozenset({'a','e','o','u'})
+aiou = frozenset({'a','i','o','u'})
+eiou = frozenset({'e','i','o','u'})
+aei = frozenset({'a','e','i'})
+aeo = frozenset({'a','e','o'})
+aeu = frozenset({'a','e','u'})
+aio = frozenset({'a','i','o'})
+aiu = frozenset({'a','i','u'})
+aou = frozenset({'a','o','u'})
+eio = frozenset({'e','i','o'})
+eiu = frozenset({'e','i','u'})
+eou = frozenset({'e','o','u'})
+iou = frozenset({'i','o','u'})
+ae = frozenset({'a','e'})
+ai = frozenset({'a','i'})
+ao = frozenset({'a','o'})
+au = frozenset({'a','u'})
+ei = frozenset({'e','i'})
+eo = frozenset({'e','o'})
+eu = frozenset({'e','u'})
+io = frozenset({'i','o'})
+iu = frozenset({'i','u'})
+ou = frozenset({'o','u'})
+a = frozenset({'a'})
+e = frozenset({'e'})
+i = frozenset({'i'})
+o = frozenset({'o'})
+u = frozenset({'u'})
+t = int(input())
+ans = list()
+while t!=0:
+    dish = 0
+    vowels = defaultdict(int)
+    copyOfVowels = defaultdict(int)
+    n = int(input())
+    i = 0
+    while i < n:
+        string = input()
+        vowels[frozenset(''.join(string))] += 1
+        copyOfVowels[frozenset(''.join(string))] += 1
+        i = i + 1
+    for (k,v) in copyOfVowels.items():
+        if k == aeiou:
+            dish += (v*(sum(vowels.values()))) - ((v*(v+1))//2)
+        elif k == aeio:
+            dish += v*(vowels[aeiu]+vowels[aeou]+vowels[aiou]+vowels[eiou]+vowels[aeu]+vowels[aiu]+vowels[aou]+vowels[eiu]+vowels[eou]+vowels[iou]+vowels[au]+vowels[eu]+vowels[iu]+vowels[ou]+vowels[u])
+        elif k == aeiu:
+            dish += v*(vowels[aeou]+vowels[aiou]+vowels[eiou]+vowels[aeo]+vowels[aio]+vowels[aou]+vowels[eio]+vowels[eou]+vowels[iou]+vowels[ao]+vowels[eo]+vowels[io]+vowels[ou]+vowels[o])
+        elif k == aeou:
+            dish += v*(vowels[aiou]+vowels[eiou]+vowels[aei]+vowels[aio]+vowels[aiu]+vowels[eio]+vowels[eiu]+vowels[iou]+vowels[ai]+vowels[ei]+vowels[io]+vowels[iu]+vowels[i])
+        elif k == aiou:
+            dish += v*(vowels[eiou]+vowels[aei]+vowels[aeo]+vowels[aeu]+vowels[eio]+vowels[eiu]+vowels[eou]+vowels[ae]+vowels[ei]+vowels[eo]+vowels[eu]+vowels[e])
+        elif k == eiou:
+            dish += v*(vowels[aei]+vowels[aeo]+vowels[aeu]+vowels[aio]+vowels[aiu]+vowels[aou]+vowels[ae]+vowels[ai]+vowels[ao]+vowels[au]+vowels[a])
+        elif k == aei:
+            dish += v*(vowels[aou]+vowels[eou]+vowels[iou]+vowels[ou])
+        elif k == aeo:
+            dish += v*(vowels[aiu]+vowels[eiu]+vowels[iou]+vowels[iu])
+        elif k == aeu:
+            dish += v*(vowels[aio]+vowels[eio]+vowels[iou]+vowels[io])
+        elif k == aio:
+            dish += v*(vowels[eiu]+vowels[eou]+vowels[eu])
+        elif k == aiu:
+            dish += v*(vowels[eio]+vowels[eou]+vowels[eo])
+        elif k == aou:
+            dish += v*(vowels[eio]+vowels[eiu]+vowels[ei])
+        elif k == eio:
+            dish += v*(vowels[au])
+        elif k == eiu:
+            dish += v*(vowels[ao])
+        elif k == eou:
+            dish += v*(vowels[ai])
+        elif k == iou:
+            dish += v*(vowels[ae])
+    ans.append(dish)
+    t = t-1 
+for x in ans:
+    print(x)   
