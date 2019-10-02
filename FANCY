@@ -1,1 +1,17 @@
-
+import re
+t = int(input())
+listOfSentences = list()
+while t!=0:
+    temp = input()
+    listOfSentences.append(temp)
+    t = t-1
+checkword1 = re.compile('not') 
+checkword2 = re.compile('(\S+not\S+)|(\s+not\S+)|(\S*not\S+)|(\S+not\s+)|(\S+not\S*)') 
+for sentence in listOfSentences:
+    if checkword1.search(sentence):
+        if checkword2.search(sentence):
+            print('regularly fancy')
+        else:
+            print('Real Fancy')
+    else:
+        print('regularly fancy')
