@@ -1,0 +1,32 @@
+t = int(input())
+ans = list()
+while t!=0:
+    n,d = [int(num) for num in input().split()]
+    n = str(n)
+    flag = 0
+    i = 0
+    while flag == 0:
+        temp = [int(i) for i in n]
+        maximum = max(temp)
+        if maximum > d:
+            temp.remove(maximum)
+            temp.append(d)
+        elif  temp[0] > min(temp):
+            del temp[0]
+            temp.append(d)
+        else:
+            flag = 1
+        n = ''.join(str(digit) for digit in temp)
+    i = 0
+    temp = [int(i) for i in n]
+    last = len(temp) - 1
+    while i < last:
+        if temp[i] > min(temp[i+1::]):
+            temp.pop(i)
+            temp.append(d)
+        else:
+            i = i+1 
+    ans.append(''.join(str(digit) for digit in temp))
+    t = t-1 
+for x in ans:
+    print(x)   
