@@ -1,1 +1,30 @@
-
+t = int(input())
+ans = list()
+while t!=0:
+    n,a,b = [int(x) for x in input().split()]
+    seq = list(map(int, input().split()))
+    acnt = 0
+    bcnt = 0
+    common = 0
+    if a == b:
+       ans.append(0)
+    else:
+        for x in seq:
+            if x%a == 0 and x%b == 0:
+                common = common + 1
+            elif x%a == 0:
+                acnt = acnt + 1
+            elif x%b == 0:
+                bcnt = bcnt + 1
+        if common !=0:
+            acnt = acnt + 1
+        if acnt > bcnt:
+            ans.append(0)
+        else:
+            ans.append(1)
+    t = t-1
+for x in ans:
+    if x == 0:
+        print("BOB")
+    elif x == 1:
+        print("ALICE")
