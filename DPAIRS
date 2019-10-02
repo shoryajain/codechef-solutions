@@ -1,1 +1,15 @@
-
+n,m = [int(x) for x in input().split()]
+seq1 = list(map(int, input().split()))
+seq2 = list(map(int, input().split()))
+pairs1 = { i : seq1[i] for i in range(0, len(seq1) ) }
+pairs2 = { i : seq2[i] for i in range(0, len(seq2) ) }
+sorted_pairs1 = sorted(pairs1.items(), key=lambda kv: kv[1])
+sorted_pairs2 = sorted(pairs2.items(), key=lambda kv: kv[1])
+ans = list()
+for k,v in sorted_pairs2:
+    ans.append((sorted_pairs1[0][0],k))
+for k,v in sorted_pairs1:
+    ans.append((k,sorted_pairs2[len(sorted_pairs2)-1][0]))
+ans = set(ans)
+for k,v in ans:
+    print("\n",k,v)
