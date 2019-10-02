@@ -1,1 +1,19 @@
-
+t = int(input())
+ans = list()
+while t!=0:
+    n,p = [int(x) for x in input().split()]
+    r = p-n
+    a = int(n/2) + 1
+    m = n%a
+    temp = 0
+    if n == 1 or n == 2:
+        temp = p*p*p
+    elif n == p:
+        temp = a*a
+    else:
+        temp = (3*r*r) + (3*a*r) + (a*a)
+    ans.append(temp)
+    t = t-1
+for x in ans:
+    print()
+    print(x)
