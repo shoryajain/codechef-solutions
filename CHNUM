@@ -20,4 +20,4 @@ while t!=0:
         ans.append((size2,size1))
     t = t-1 
 for (x,y) in ans:
-    print(x,y)   
+    print(x,y)
